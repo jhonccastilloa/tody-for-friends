@@ -1,5 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, HostListener } from '@angular/core';
 import { Item, NgxWheelComponent } from 'ngx-wheel';
+import { fromEvent, Observable, Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 @Component({
   selector: 'app-root',
@@ -12,12 +13,12 @@ export class AppComponent {
   spinDuration: number = 2;
   values: string = 'Tomo \nTomamos \nToman \nIzquierda \nDerecha \nObliga';
   items: Item[] = [];
+  resizeObservable$: Observable<Event> = fromEvent(window, 'resize');
   optionWin: Item = {
     text: '',
     fillStyle: '',
     id: null,
   };
-
   before() {
     console.log('before');
   }
@@ -31,7 +32,12 @@ export class AppComponent {
   }
   ngOnInit() {
     this.transformData();
+    this.size = window.innerWidth <= 644 ? 400 : 600;
+    this.resizeObservable$.subscribe(() => {
+      this.size = window.innerWidth <= 644 ? 400 : 600;
+    });
   }
+
   transformData() {
     const splitValues = this.values.split('\n');
     this.items = splitValues
