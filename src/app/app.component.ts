@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Item, NgxWheelComponent } from 'ngx-wheel';
-
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,37 +8,51 @@ import { Item, NgxWheelComponent } from 'ngx-wheel';
 })
 export class AppComponent {
   @ViewChild(NgxWheelComponent, { static: false }) wheel!: NgxWheelComponent;
-  idToLandOn = 1;
-  width = 600;
-  height = 600;
-  spinDuration = 8;
+  size: number = 600;
+  spinDuration: number = 2;
   values: string = 'Tomo \nTomamos \nToman \nIzquierda \nDerecha \nObliga';
   items: Item[] = [];
+  optionWin: Item = {
+    text: '',
+    fillStyle: '',
+    id: null,
+  };
 
   before() {
     console.log('before');
   }
   after() {
-    console.log('after');
+    Swal.fire({
+      title: ' ¡ ' + this.optionWin.text + ' !',
+      imageUrl: '../assets/images/96x96.png',
+      confirmButtonColor: '#e74c3c',
+      confirmButtonText: 'Ok, Reiniciar',
+    });
   }
   ngOnInit() {
     this.transformData();
   }
   transformData() {
     const splitValues = this.values.split('\n');
-    this.items = splitValues.map((value, key) => ({
-      text: value.trim(),
-      id: key,
-      fillStyle: '#' + (((1 << 24) * Math.random()) | 0).toString(16),
-    }));
+    this.items = splitValues
+      .filter((el) => el.trim())
+      .map((value, key) => ({
+        text: value.trim(),
+        id: key,
+        fillStyle: '#' + (((1 << 24) * Math.random()) | 0).toString(16),
+      }));
   }
-  onGenerateWheel() {
+  async onGenerateWheel() {
+    this.transformData();
+    await new Promise((resolve) => setTimeout(resolve, 0));
     this.wheel.reset();
   }
-  onBlur() {
-    this.transformData();
-  }
+
   OnPlayWheel() {
+    const randomId = Math.floor(Math.random() * this.items.length);
+    this.wheel.reset();
+    this.wheel.idToLandOn = randomId;
+    this.optionWin = this.items[randomId];
     this.wheel.spin();
   }
 }

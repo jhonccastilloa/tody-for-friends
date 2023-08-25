@@ -1,21 +1,32 @@
-<textarea name="workoutName" [(ngModel)]="values" rows="13" (blur)="onBlur()">
-</textarea>
-<h1>{{ values }}</h1>
-<ngx-wheel
-  [width]="width"
-  [height]="height"
-  [spinDuration]="spinDuration"
-  [items]="items"
-  [innerRadius]="50"
-  [spinAmount]="10"
-  pointerStrokeColor="red"
-  pointerFillColor="purple"
-  [idToLandOn]="idToLandOn"
-  (onSpinStart)="before()"
-  (onSpinComplete)="after()"
-  #wheel
->
-</ngx-wheel>
-
-<button (click)="onGenerateWheel()">Generate</button>
-<button (click)="OnPlayWheel()">Play</button>
+<main class="main">
+  <header class="header">BIENVENIDOS A TODI2 - PWA</header>
+  <div class="wheel-main">
+    <div class="wheel-list-elements">
+      <h3 class="wheel-list-title">Lista de elementos:</h3>
+      <textarea
+        class="wheel-textarea"
+        name="workoutName"
+        [(ngModel)]="values"
+        rows="13"
+      ></textarea>
+      <button class="wheel-button green" (click)="onGenerateWheel()">
+        Generar Ruleta
+      </button>
+    </div>
+    <button class="wheel-button red" (click)="OnPlayWheel()">Play</button>
+    <ngx-wheel
+      [width]="size"
+      [height]="size"
+      [spinDuration]="spinDuration"
+      [items]="items"
+      [innerRadius]="50"
+      [spinAmount]="10"
+      pointerStrokeColor="white"
+      pointerFillColor="purple"
+      (onSpinStart)="before()"
+      (onSpinComplete)="after()"
+      #wheel
+    >
+    </ngx-wheel>
+  </div>
+</main>
